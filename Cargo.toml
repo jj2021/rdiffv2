@@ -1,0 +1,9 @@
+[package]
+name = "rdiffv2"
+version = "0.1.0"
+authors = ["jj2021 <james.jenkins2@marist.edu>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
