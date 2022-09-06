@@ -87,20 +87,69 @@ fn lcs(a: &str, b: &str) -> Vec<CircularArray> {
 }
 
 // TODO: Implement backtracking (shortest edit sequence)
-fn ses(trace: &mut Vec<CircularArray>) {
-  let mut d_pos = trace.pop();
-  while !d_pos.is_none(){
-    let _k = 0;
+fn ses(trace: &mut Vec<CircularArray>, a: &str, b: &str) {
+  let mut diff: Vec<String> = vec![];
+
+  let mut x = a.chars().count() as i32;
+  let mut y = b.chars().count() as i32;
+
+  let mut d = trace.len() as i32;
+  let mut d_pos = trace.pop(); // pop returns an Option<CircularArray> => Needs to be unwrapped to get underlying value
+
+  while d_pos.is_some() {
+    let pos = d_pos.unwrap();
+    let k = x - y;
+
+    let prev_k: i32;
+    if k == (-1 * d) || (k != d && pos.get(k - 1) < pos.get(k + 1)) {
+      prev_k = k + 1;
+    } else {
+      prev_k = k - 1;
+    }
+
+    let prev_x = pos.get(prev_k);
+    let prev_y = prev_x - prev_k;
+
+    // Trace diagonals in path if they exist
+    while x > prev_x && y > prev_y {
+      diff.push(format!("  {}", &a[(x - 1) as usize..x as usize]));
+      x = x - 1; 
+      y = y - 1;
+    }
+
+    if d > 0 {
+      if x == prev_x {
+        diff.push(format!("+ {}", &b[(y - 1) as usize..y as usize]));
+      } else if y == prev_y {
+        diff.push(format!("- {}", &a[(x - 1) as usize..x as usize]));
+      } else {
+        diff.push(format!("  {}", &a[(x - 1) as usize..x as usize]));
+      }
+    }
+
+    x = prev_x;
+    y = prev_y;
 
     // Checkout x values for the previous depth iteration
+    d = trace.len() as i32;
     d_pos = trace.pop();
   }
-  0;
+
+  // display the diff
+  let mut next_line = diff.pop();
+  while next_line.is_some() {
+    let line = next_line.unwrap();
+    println!("{}", line);
+    next_line = diff.pop();
+  }
+
 }
 
 // TODO: Utilize diff logic in a CLI applicaation
 pub fn run() {
-  let mut edit_trace = lcs("hello", "there");
+  let first_text = "hello";
+  let second_text = "hallo";
+  let mut edit_trace = lcs(first_text, second_text);
   println!("shortest edit distance: {}", edit_trace.len());
-  ses(&mut edit_trace);
+  ses(&mut edit_trace, first_text, second_text);
 }
