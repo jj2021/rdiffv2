@@ -1,5 +1,6 @@
 // Myers diff algorithm implementation
 
+#[derive(Clone)]
 struct CircularArray {
   arr: Vec<i32>,
 }
@@ -30,7 +31,7 @@ impl CircularArray {
 }
 
 // TODO: Implement Longest Common Subsequence method
-fn lcs(a: &str, b: &str) -> i32  {
+fn lcs(a: &str, b: &str) -> Vec<CircularArray> {
   // *** SETUP ***
   let n = a.chars().count(); // len() returns num bytes, not num characters
   let m = b.chars().count();
@@ -45,8 +46,12 @@ fn lcs(a: &str, b: &str) -> i32  {
   // Create a new slice to track max x values
 
   let mut pos = CircularArray::new(2 * max + 1);
+  pos.set(1, 0);
 
   // *** iterate over depth and k value ***
+
+  // Track values for all iterations => the full diff graph
+  let mut trace: Vec<CircularArray> = vec![];
 
   // max is of type usize, so we have to cast to i32 to allow k to be negative
   // maybe try using isize type instead of i32???
@@ -70,23 +75,32 @@ fn lcs(a: &str, b: &str) -> i32  {
       pos.set(k, x);
 
       if x >= n as i32 && y >= m as i32 {
-        return d;
+        return trace;
       }
 
     }
+    trace.push(pos.clone());
   }
   // returns -1 if there is an error
-  -1 
+  //-1 
+  vec![]
 }
 
 // TODO: Implement backtracking (shortest edit sequence)
-fn ses() -> i32 {
-  0
+fn ses(trace: &mut Vec<CircularArray>) {
+  let mut d_pos = trace.pop();
+  while !d_pos.is_none(){
+    let _k = 0;
+
+    // Checkout x values for the previous depth iteration
+    d_pos = trace.pop();
+  }
+  0;
 }
 
 // TODO: Utilize diff logic in a CLI applicaation
 pub fn run() {
-  let _ = ses();
-
-  println!("shortest edit distance: {}", lcs("hello", "there"));
+  let mut edit_trace = lcs("hello", "there");
+  println!("shortest edit distance: {}", edit_trace.len());
+  ses(&mut edit_trace);
 }
