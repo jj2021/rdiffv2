@@ -30,7 +30,7 @@ impl CircularArray {
   }
 }
 
-// TODO: Implement Longest Common Subsequence method
+// lcs produces the shortest edit sequence graph, given two strings
 fn lcs(a: &str, b: &str) -> Vec<CircularArray> {
   // *** SETUP ***
   let n = a.chars().count(); // len() returns num bytes, not num characters
@@ -86,7 +86,7 @@ fn lcs(a: &str, b: &str) -> Vec<CircularArray> {
   vec![]
 }
 
-// TODO: Implement backtracking (shortest edit sequence)
+// ses backtracks through a given diff graph to display the edit sequence
 fn ses(trace: &mut Vec<CircularArray>, a: &str, b: &str) {
   let mut diff: Vec<String> = vec![];
 
