@@ -146,9 +146,7 @@ fn ses(trace: &mut Vec<CircularArray>, a: &str, b: &str) {
 }
 
 // TODO: Utilize diff logic in a CLI applicaation
-pub fn run() {
-  let first_text = "hello";
-  let second_text = "hallo";
+pub fn run(first_text: &str, second_text: &str) {
   let mut edit_trace = lcs(first_text, second_text);
   println!("shortest edit distance: {}", edit_trace.len());
   ses(&mut edit_trace, first_text, second_text);
