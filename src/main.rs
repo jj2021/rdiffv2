@@ -18,12 +18,16 @@ fn main() {
   let f2 = fs::read_to_string(&args[2]).expect("Could not read file");
 
   // Place lines of file into a vec
-  if let Ok(f) = File::open(&args[1]) {
-    let reader = io::BufReader::new(f);
-    let num_lines = reader.lines().count();
-    println!("file has {} lines\n", num_lines);
-  }
-
-
+  let _ = file_to_vec(&args[1]);
+  let _ = file_to_vec(&args[2]);
+  
   run(&f1, &f2);
+}
+
+fn file_to_vec(file_name: &str) -> Vec<String> {
+  let f = File::open(file_name).unwrap();
+  let reader = io::BufReader::new(f);
+  let collect_lines: Vec<String> = reader.lines().map(|x| x.unwrap()).collect();
+  println!("vec file lines: {:?}\n", collect_lines);
+  collect_lines
 }
