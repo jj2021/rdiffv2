@@ -14,14 +14,19 @@ fn main() {
     return
   }
 
-  let f1 = fs::read_to_string(&args[1]).expect("Could not read file");
-  let f2 = fs::read_to_string(&args[2]).expect("Could not read file");
+  // convert files to strings
+  let s1 = fs::read_to_string(&args[1]).expect("Could not read file");
+  let s2 = fs::read_to_string(&args[2]).expect("Could not read file");
+
+  // diff strings
+  run(&s1, &s2);
 
   // Place lines of file into a vec
-  let _ = file_to_vec(&args[1]);
-  let _ = file_to_vec(&args[2]);
-  
-  run(&f1, &f2);
+  let f3 = file_to_vec(&args[1]);
+  let f4 = file_to_vec(&args[2]);
+
+  // diff files
+  rdiff::run_on_files(f3, f4);
 }
 
 fn file_to_vec(file_name: &str) -> Vec<String> {
