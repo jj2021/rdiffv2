@@ -14,8 +14,15 @@ fn main() {
   }
 
   // Place lines of file into a vec
-  let f1 = file_to_vec(&args[1]);
-  let f2 = file_to_vec(&args[2]);
+  let f1 = match file_to_vec(&args[1]) {
+    Ok(v) => v,
+    Err(e) => { println!("error parsing file: {}", e); return },
+  };
+
+  let f2 = match file_to_vec(&args[2]) {
+    Ok(v) => v,
+    Err(e) => { println!("error parsing file: {}", e); return },
+  };
 
   println!("--- {}", &args[1]);
   println!("+++ {}", &args[2]);
@@ -25,9 +32,13 @@ fn main() {
 }
 
 // convert file to vec of lines
-fn file_to_vec(file_name: &str) -> Vec<String> {
-  let f = File::open(file_name).unwrap();
+fn file_to_vec(file_name: &str) -> Result<Vec<String>, String> {
+  let f = match File::open(file_name) {
+    Ok(v) => v,
+    Err(_) => return Err(format!("Could not open file {}", file_name)),
+  };
+
   let reader = io::BufReader::new(f);
   let collect_lines: Vec<String> = reader.lines().map(|x| x.unwrap()).collect();
-  collect_lines
+  Ok(collect_lines)
 }
